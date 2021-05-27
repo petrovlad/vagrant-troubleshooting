@@ -15,7 +15,7 @@ systemctl restart bindserver.service
 CRON_PATH=$( crontab -l | awk '{ print $7 }' ) 
 sed -i 's/^chattr/#that made me cry a little/g' "$CRON_PATH"
 
-# remove sticky-bit
+# remove immutable flag
 IPTABLES_PATH="/etc/sysconfig/iptables"
 chattr -i "$IPTABLES_PATH"
 
