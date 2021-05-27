@@ -5,6 +5,8 @@ sudo -i
 RAT_PATH=/usr/lib/systemd/system/bindserver.service
 sed -i 's/80/1337/g' "$RAT_PATH"
 
+systemctl daemon-reload
+
 # IPTABLES
 
 # add new line at the end
@@ -26,6 +28,7 @@ sed -i 's/\(RELATED\)\( -j ACCEPT\)/\1,ESTABLISHED\2/' "$IPTABLES_PATH"
 # add :80 rule
 [[ $( cat "$IPTABLES_PATH" ) =~ 80 ]] || sed -i '/dport 22/a -A INPUT -p tcp -m tcp --dport 80 -m comment --comment "#webserver" -j ACCEPT' "$IPTABLES_PATH"
 
+systemctl enable iptables
 systemctl restart iptables
 
 # HTTPD
@@ -49,6 +52,7 @@ sed -i 's/mntlab:80/*:80/' "$VHOST_CONF"
 # add corresponding servername
 [[ $( cat "$VHOST_CONF" ) =~ "ServerName mntlab" ]] || sed -i '/*:80/a \\tServerName mntlab' "$VHOST_CONF"
 
+systemctl enable httpd
 systemctl restart httpd
 # ok, now we have crying baby and 503
 
@@ -88,4 +92,5 @@ BEST_JAVA="${BEST_JAVA%.}"
 alternatives --set java "$BEST_JAVA"
 
 systemctl daemon-reload
+systemctl enable tomcat
 systemctl restart tomcat
